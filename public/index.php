@@ -1,67 +1,78 @@
 <?php
-
 declare(strict_types=1);
 
-require_once __DIR__ . '/../src/Http/HtmlResponse.php';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/../src/Http/JsonResponse.php';
 require_once __DIR__ . '/../src/Http/Router.php';
-require_once __DIR__ . '/../src/Http/Cors.php';
-require_once __DIR__ . '/../src/Http/Session.php';
 require_once __DIR__ . '/../src/Infrastructure/Database.php';
-require_once __DIR__ . '/../src/Controllers/HealthController.php';
-require_once __DIR__ . '/../src/Controllers/LoginController.php';
 
-use App\Controllers\HealthController;
-use App\Http\HtmlResponse;
-use App\Controllers\LoginController;
-use App\Http\Cors;
+require_once __DIR__ . '/../src/Controllers/HealthController.php';
+require_once __DIR__ . '/../src/Controllers/UserController.php';
+require_once __DIR__ . '/../src/Controllers/FileController.php';
+require_once __DIR__ . '/../src/Controllers/FlagController.php';
+
 use App\Http\JsonResponse;
 use App\Http\Router;
 use App\Infrastructure\Database;
 
-Cors::handle();
+use App\Controllers\HealthController;
+use App\Controllers\UserController;
+use App\Controllers\FileController;
+use App\Controllers\FlagController;
 
 try {
     $router = new Router();
 
+    // Controllers
+    $healthController = new HealthController();
+    $userController = new UserController();
+    $fileController = new FileController();
+    $flagController = new FlagController();
+
+    // Root
     $router->get('/', static function (): void {
         JsonResponse::ok(['service' => 'api']);
     });
 
-    $router->get('/api', static function (): void {
-        JsonResponse::ok(['service' => 'api']);
-    });
-
-    $healthController = new HealthController();
+    // Health
     $router->get('/health', static function () use ($healthController): void {
         $healthController->get();
     });
 
-    $loginController = new LoginController();
-    $router->post('/login', static function () use ($loginController): void {
-        $loginController->login();
-    });
-
-    $router->post('/register', static function () use ($loginController): void {
-        $loginController->register();
-    });
-
-    $router->post('/logout', static function () use ($loginController): void {
-        $loginController->logout();
-    });
-
+    // DB test
     $router->get('/db/ping', static function (): void {
         try {
-            $pdo = Database::createPdoFromEnv();
+            $pdo = Database::getConnection();
             $pdo->query('SELECT 1');
             JsonResponse::ok(['db' => 'ok']);
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $e) {
             JsonResponse::error('Database unavailable', 500);
         }
     });
 
-    $router->dispatch();
-} catch (Throwable $throwable) {
-    JsonResponse::error('Internal Server Error', 500);
-}
+    // USERS (SQL Injection)
+    $router->get('/users', static function () use ($userController): void {
+        $userController->getUser();
+    });
 
+    // FILES
+    $router->get('/upload', static function () use ($fileController): void {
+        $fileController->upload();
+    });
+
+    $router->get('/download', static function () use ($fileController): void {
+        $fileController->download();
+    });
+
+    // FLAG
+    $router->get('/flag', static function () use ($flagController): void {
+        $flagController->getFlag();
+    });
+
+    $router->dispatch();
+
+} catch (\Throwable $e) {
+    echo $e->getMessage();
+}
