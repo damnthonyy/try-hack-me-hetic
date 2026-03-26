@@ -6,27 +6,35 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/../src/Http/JsonResponse.php';
 require_once __DIR__ . '/../src/Http/Router.php';
+require_once __DIR__ . '/../src/Http/Cors.php';
+require_once __DIR__ . '/../src/Http/Session.php';
 require_once __DIR__ . '/../src/Infrastructure/Database.php';
 
 require_once __DIR__ . '/../src/Controllers/HealthController.php';
+require_once __DIR__ . '/../src/Controllers/LoginController.php';
 require_once __DIR__ . '/../src/Controllers/UserController.php';
 require_once __DIR__ . '/../src/Controllers/FileController.php';
 require_once __DIR__ . '/../src/Controllers/FlagController.php';
 
 use App\Http\JsonResponse;
 use App\Http\Router;
+use App\Http\Cors;
 use App\Infrastructure\Database;
 
 use App\Controllers\HealthController;
+use App\Controllers\LoginController;
 use App\Controllers\UserController;
 use App\Controllers\FileController;
 use App\Controllers\FlagController;
+
+Cors::handle();
 
 try {
     $router = new Router();
 
     // Controllers
     $healthController = new HealthController();
+    $loginController = new LoginController();
     $userController = new UserController();
     $fileController = new FileController();
     $flagController = new FlagController();
@@ -39,6 +47,19 @@ try {
     // Health
     $router->get('/health', static function () use ($healthController): void {
         $healthController->get();
+    });
+
+    // Login routes
+    $router->post('/login', static function () use ($loginController): void {
+        $loginController->login();
+    });
+
+    $router->post('/register', static function () use ($loginController): void {
+        $loginController->register();
+    });
+
+    $router->post('/logout', static function () use ($loginController): void {
+        $loginController->logout();
     });
 
     // DB test
