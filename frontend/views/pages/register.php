@@ -3,12 +3,29 @@
 declare(strict_types=1);
 
 $pageCss = 'pages/auth';
+
+$authErrors = [
+    'required' => 'Email et mot de passe obligatoires.',
+    'mismatch' => 'Les mots de passe ne correspondent pas.',
+    'email' => 'Adresse email invalide.',
+    'password' => 'Le mot de passe doit faire au moins 6 caractères.',
+    'taken' => 'Cette adresse email est déjà utilisée.',
+    'server' => 'Erreur serveur. Réessaie plus tard.',
+];
+$authErrorCode = isset($_GET['error']) ? (string)$_GET['error'] : '';
+$authErrorMessage = $authErrorCode !== '' && isset($authErrors[$authErrorCode])
+    ? $authErrors[$authErrorCode]
+    : ($authErrorCode !== '' ? 'Inscription impossible.' : '');
 ?>
 <section class="auth">
     <header class="auth__header">
         <h1 class="title">Inscription</h1>
         <p class="lead">Crée un compte pour continuer.</p>
     </header>
+
+    <?php if ($authErrorMessage !== ''): ?>
+        <div class="auth__alert auth__alert--error" role="alert"><?= htmlspecialchars($authErrorMessage, ENT_QUOTES, 'UTF-8') ?></div>
+    <?php endif; ?>
 
     <form class="auth__form" action="/register" method="post">
         <div class="form-group">

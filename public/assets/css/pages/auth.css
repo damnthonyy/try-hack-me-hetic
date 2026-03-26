@@ -27,6 +27,19 @@
     font-size: 0.95rem;
 }
 
+.auth__alert {
+    margin-bottom: 1rem;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
+
+.auth__alert--error {
+    background: rgb(254 242 242);
+    border: 1px solid rgb(252 165 165);
+    color: rgb(127 29 29);
+}
+
 .auth__form {
     display: flex;
     flex-direction: column;

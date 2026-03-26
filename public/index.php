@@ -8,9 +8,12 @@ require_once __DIR__ . '/../src/Http/Router.php';
 require_once __DIR__ . '/../src/Http/Cors.php';
 require_once __DIR__ . '/../src/Http/Session.php';
 require_once __DIR__ . '/../src/Infrastructure/Database.php';
+require_once __DIR__ . '/../src/Http/RequestBody.php';
 require_once __DIR__ . '/../src/Controllers/HealthController.php';
 require_once __DIR__ . '/../src/Controllers/LoginController.php';
+require_once __DIR__ . '/../src/Controllers/DashboardController.php';
 
+use App\Controllers\DashboardController;
 use App\Controllers\HealthController;
 use App\Controllers\LoginController;
 use App\Http\Cors;
@@ -36,8 +39,17 @@ try {
         HtmlResponse::render('pages/register', ['title' => 'Inscription']);
     });
 
-    $router->get('/dashboard', static function (): void {
-        HtmlResponse::render('pages/dashboard', ['title' => 'Tableau de bord']);
+    $router->get('/auth/signup', static function (): void {
+        HtmlResponse::render('pages/register', ['title' => 'Inscription']);
+    });
+
+    $dashboardController = new DashboardController();
+    $router->get('/dashboard', static function () use ($dashboardController): void {
+        $dashboardController->show();
+    });
+
+    $router->post('/dashboard', static function () use ($dashboardController): void {
+        $dashboardController->handlePost();
     });
 
     $router->get('/api', static function (): void {
@@ -56,6 +68,10 @@ try {
 
     $router->post('/register', static function () use ($loginController): void {
         $loginController->register();
+    });
+
+    $router->get('/logout', static function () use ($loginController): void {
+        $loginController->logout();
     });
 
     $router->post('/logout', static function () use ($loginController): void {
