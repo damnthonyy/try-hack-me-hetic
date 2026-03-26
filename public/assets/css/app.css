@@ -37,4 +37,10 @@ code {
 
 a {
     color: #0b57d0;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+a:hover {
+    color: #0948ad;
 }

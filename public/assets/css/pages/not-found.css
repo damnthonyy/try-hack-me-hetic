@@ -1,0 +1,21 @@
+/* 404 */
+
+.page--not-found {
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+.page--not-found .title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.page--not-found .lead {
+    margin-bottom: 1.25rem;
+    font-size: 1.05rem;
+}
+
+.page--not-found a {
+    font-weight: 600;
+}

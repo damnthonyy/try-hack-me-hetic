@@ -1,0 +1,19 @@
+/* Home */
+
+.page--home {
+    padding: 0.5rem 0;
+}
+
+.page--home .title {
+    font-weight: 650;
+    letter-spacing: -0.02em;
+}
+
+.page--home .lead {
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.page--home .lead code {
+    font-weight: 500;
+}
