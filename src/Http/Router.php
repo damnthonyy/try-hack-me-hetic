@@ -16,6 +16,11 @@ final class Router
         $this->routesByMethodAndPath['GET'][$this->normalizePath($path)] = $handler;
     }
 
+    public function post(string $path, callable $handler): void
+    {
+        $this->routesByMethodAndPath['POST'][$this->normalizePath($path)] = $handler;
+    }
+
     public function dispatch(): void
     {
         $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
