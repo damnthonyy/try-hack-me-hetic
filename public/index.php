@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/../src/Http/HtmlResponse.php';
 require_once __DIR__ . '/../src/Http/JsonResponse.php';
 require_once __DIR__ . '/../src/Http/Router.php';
 require_once __DIR__ . '/../src/Infrastructure/Database.php';
 require_once __DIR__ . '/../src/Controllers/HealthController.php';
 
 use App\Controllers\HealthController;
+use App\Http\HtmlResponse;
 use App\Http\JsonResponse;
 use App\Http\Router;
 use App\Infrastructure\Database;
@@ -16,6 +18,10 @@ try {
     $router = new Router();
 
     $router->get('/', static function (): void {
+        HtmlResponse::view('home', ['title' => 'Accueil']);
+    });
+
+    $router->get('/api', static function (): void {
         JsonResponse::ok(['service' => 'api']);
     });
 
