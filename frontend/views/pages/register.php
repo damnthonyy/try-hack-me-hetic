@@ -10,7 +10,7 @@ $pageCss = 'pages/register';
         <p class="lead">Crée un compte pour continuer.</p>
     </header>
 
-    <form class="auth__form" action="/auth/signup" method="post">
+    <form class="auth__form" action="/register" method="post">
         <div class="form-group">
             <label class="form-label" for="reg-email">Email</label>
             <input type="email" class="form-control" id="reg-email" name="email" autocomplete="email" required>

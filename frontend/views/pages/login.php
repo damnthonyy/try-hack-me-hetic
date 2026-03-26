@@ -10,7 +10,7 @@ $pageCss = 'pages/login';
         <p class="lead">Connecte-toi pour accéder à ton compte.</p>
     </header>
 
-    <form class="auth__form" action="/auth/login" method="post">
+    <form class="auth__form" action="/login" method="post">
         <div class="form-group">
             <label class="form-label" for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
@@ -22,5 +22,5 @@ $pageCss = 'pages/login';
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
 
-    <p class="auth__footer">Pas de compte ? <a href="/auth/signup">S’inscrire</a></p>
+    <p class="auth__footer">Pas de compte ? <a href="/auth/register">S’inscrire</a></p>
 </section>

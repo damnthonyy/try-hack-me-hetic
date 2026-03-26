@@ -32,7 +32,7 @@ try {
         HtmlResponse::render('pages/login', ['title' => 'Connexion']);
     });
 
-    $router->get('/auth/signup', static function (): void {
+    $router->get('/auth/register', static function (): void {
         HtmlResponse::render('pages/register', ['title' => 'Inscription']);
     });
 
