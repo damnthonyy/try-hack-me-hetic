@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$pageCss = 'pages/register';
+$pageCss = 'pages/auth';
 ?>
 <section class="auth">
     <header class="auth__header">
