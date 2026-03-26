@@ -68,7 +68,6 @@ final class LoginController
         $email = $input['email'];
         $password = $input['password'];
 
-        // Validation basique
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             JsonResponse::error('Invalid email format', 400);
             return;

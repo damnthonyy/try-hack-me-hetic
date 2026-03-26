@@ -9,12 +9,11 @@ final class Session
     public static function start(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
-            // Configuration sécurisée des sessions
-            ini_set('session.cookie_httponly', '1'); // Pas accessible via JavaScript
+            ini_set('session.cookie_httponly', '1'); 
             ini_set('session.use_only_cookies', '1');
-            ini_set('session.cookie_samesite', 'Lax'); // Protection CSRF
+            ini_set('session.cookie_samesite', 'Lax'); 
             
-            // En production, activer HTTPS uniquement
+
             if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'production') {
                 ini_set('session.cookie_secure', '1');
             }
