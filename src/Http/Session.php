@@ -9,10 +9,13 @@ final class Session
     public static function start(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
+            $lifetime = (int)($_ENV['SESSION_LIFETIME'] ?? 86400);
+            
             ini_set('session.cookie_httponly', '1'); 
             ini_set('session.use_only_cookies', '1');
-            ini_set('session.cookie_samesite', 'Lax'); 
-            
+            ini_set('session.cookie_samesite', 'Lax');
+            ini_set('session.cookie_lifetime', (string)$lifetime);
+            ini_set('session.gc_maxlifetime', (string)$lifetime);
 
             if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'production') {
                 ini_set('session.cookie_secure', '1');

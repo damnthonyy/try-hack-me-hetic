@@ -25,7 +25,7 @@ try {
     $router = new Router();
 
     $router->get('/', static function (): void {
-        HtmlResponse::view('home', ['title' => 'Accueil']);
+        JsonResponse::ok(['service' => 'api']);
     });
 
     $router->get('/api', static function (): void {
