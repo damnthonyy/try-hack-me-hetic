@@ -12,9 +12,9 @@ require_once __DIR__ . '/../src/Controllers/HealthController.php';
 require_once __DIR__ . '/../src/Controllers/LoginController.php';
 
 use App\Controllers\HealthController;
-use App\Http\HtmlResponse;
 use App\Controllers\LoginController;
 use App\Http\Cors;
+use App\Http\HtmlResponse;
 use App\Http\JsonResponse;
 use App\Http\Router;
 use App\Infrastructure\Database;
@@ -25,7 +25,19 @@ try {
     $router = new Router();
 
     $router->get('/', static function (): void {
-        JsonResponse::ok(['service' => 'api']);
+        HtmlResponse::render('pages/home', ['title' => 'Accueil']);
+    });
+
+    $router->get('/auth/login', static function (): void {
+        HtmlResponse::render('pages/login', ['title' => 'Connexion']);
+    });
+
+    $router->get('/auth/signup', static function (): void {
+        HtmlResponse::render('pages/register', ['title' => 'Inscription']);
+    });
+
+    $router->get('/dashboard', static function (): void {
+        HtmlResponse::render('pages/dashboard', ['title' => 'Tableau de bord']);
     });
 
     $router->get('/api', static function (): void {
