@@ -1,0 +1,40 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    color: #1a1a1a;
+    background: #f6f6f6;
+}
+
+.wrap {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.title {
+    margin: 0 0 0.5rem;
+    font-size: 1.75rem;
+}
+
+.lead {
+    margin: 0;
+    color: #444;
+}
+
+code {
+    font-size: 0.9em;
+    padding: 0.1em 0.35em;
+    background: #e8e8e8;
+    border-radius: 4px;
+}
+
+a {
+    color: #0b57d0;
+}
