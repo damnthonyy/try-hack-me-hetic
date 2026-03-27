@@ -21,7 +21,9 @@ final class LoginController
         try {
             $pdo = Database::createPdoFromEnv();
 
-            $stmt = $pdo->prepare('SELECT id, email, password FROM users WHERE email = :email LIMIT 1');
+            $stmt = $pdo->prepare(
+                'SELECT id, email, username, password FROM users WHERE email = :email LIMIT 1'
+            );
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -31,6 +33,7 @@ final class LoginController
 
             Session::set('user_id', $user['id']);
             Session::set('user_email', $user['email']);
+            Session::set('user_username', (string)$user['username']);
 
             $this->redirect('/dashboard');
         } catch (\Throwable) {
@@ -47,13 +50,14 @@ final class LoginController
 
     public function register(): void
     {
+        $username = isset($_POST['username']) ? trim((string)$_POST['username']) : '';
         $email = isset($_POST['email']) ? trim((string)$_POST['email']) : '';
         $password = isset($_POST['password']) ? (string)$_POST['password'] : '';
         $passwordConfirmation = isset($_POST['password_confirmation'])
             ? (string)$_POST['password_confirmation']
             : '';
 
-        if ($email === '' || $password === '' || $passwordConfirmation === '') {
+        if ($username === '' || $email === '' || $password === '' || $passwordConfirmation === '') {
             $this->redirect('/auth/register?error=required');
         }
 
@@ -69,6 +73,11 @@ final class LoginController
             $this->redirect('/auth/register?error=password');
         }
 
+        $usernameLen = strlen($username);
+        if ($usernameLen < 3 || $usernameLen > 64 || !preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+            $this->redirect('/auth/register?error=invalid_username');
+        }
+
         try {
             $pdo = Database::createPdoFromEnv();
 
@@ -79,11 +88,21 @@ final class LoginController
                 $this->redirect('/auth/register?error=taken');
             }
 
+            $stmt = $pdo->prepare('SELECT id FROM users WHERE username = :username LIMIT 1');
+            $stmt->execute(['username' => $username]);
+
+            if ($stmt->fetch()) {
+                $this->redirect('/auth/register?error=username_taken');
+            }
+
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = $pdo->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
+            $stmt = $pdo->prepare(
+                'INSERT INTO users (email, username, password) VALUES (:email, :username, :password)'
+            );
             $stmt->execute([
                 'email' => $email,
+                'username' => $username,
                 'password' => $hashedPassword,
             ]);
 
@@ -91,6 +110,7 @@ final class LoginController
 
             Session::set('user_id', $userId);
             Session::set('user_email', $email);
+            Session::set('user_username', $username);
 
             $this->redirect('/dashboard');
         } catch (\Throwable) {

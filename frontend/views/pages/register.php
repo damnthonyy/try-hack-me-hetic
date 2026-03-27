@@ -5,11 +5,13 @@ declare(strict_types=1);
 $pageCss = 'pages/auth';
 
 $authErrors = [
-    'required' => 'Email et mot de passe obligatoires.',
+    'required' => 'Pseudo, email et mot de passe obligatoires.',
     'mismatch' => 'Les mots de passe ne correspondent pas.',
     'email' => 'Adresse email invalide.',
     'password' => 'Le mot de passe doit faire au moins 6 caractères.',
+    'invalid_username' => 'Le pseudo doit faire entre 3 et 64 caractères (lettres, chiffres et underscore uniquement).',
     'taken' => 'Cette adresse email est déjà utilisée.',
+    'username_taken' => 'Ce pseudo est déjà pris.',
     'server' => 'Erreur serveur. Réessaie plus tard.',
 ];
 $authErrorCode = isset($_GET['error']) ? (string)$_GET['error'] : '';
@@ -28,6 +30,21 @@ $authErrorMessage = $authErrorCode !== '' && isset($authErrors[$authErrorCode])
     <?php endif; ?>
 
     <form class="auth__form" action="/register" method="post">
+        <div class="form-group">
+            <label class="form-label" for="reg-username">Pseudo</label>
+            <input
+                type="text"
+                class="form-control"
+                id="reg-username"
+                name="username"
+                autocomplete="username"
+                required
+                minlength="3"
+                maxlength="64"
+                pattern="[a-zA-Z0-9_]+"
+                title="Lettres, chiffres et underscore uniquement"
+            >
+        </div>
         <div class="form-group">
             <label class="form-label" for="reg-email">Email</label>
             <input type="email" class="form-control" id="reg-email" name="email" autocomplete="email" required>

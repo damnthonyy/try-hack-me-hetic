@@ -4,93 +4,25 @@ declare(strict_types=1);
 
 $pageCss = 'pages/dashboard';
 
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['user_id'] = 1;
-    $_SESSION['username'] = 'admin';
-}
-
-$username = $_SESSION['username'];
-$uploadMessage = '';
-$uploadError = '';
-
-$uploadDir = __DIR__ . '/../../../public/uploads/';
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
-}
-
-$files = [];
-$existingFiles = scandir($uploadDir);
-foreach ($existingFiles as $file) {
-    if ($file !== '.' && $file !== '..') {
-        $files[] = [
-            'filename' => $file,
-            'upload_date' => date('Y-m-d H:i:s', filemtime($uploadDir . $file)),
-        ];
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
-    $file = $_FILES['file'];
-    $filename = basename((string) $file['name']);
-    $tmpName = $file['tmp_name'];
-    $targetPath = $uploadDir . $filename;
-
-    if (is_string($tmpName) && move_uploaded_file($tmpName, $targetPath)) {
-        $uploadMessage = 'Fichier uploadé avec succès : ' . $filename;
-
-        if (pathinfo($filename, PATHINFO_EXTENSION) === 'php') {
-            $uploadMessage .= ' — Flag: CTF{Shell_Upload_Success}';
-        }
-
-        $files = [];
-        $existingFiles = scandir($uploadDir);
-        foreach ($existingFiles as $f) {
-            if ($f !== '.' && $f !== '..') {
-                $files[] = [
-                    'filename' => $f,
-                    'upload_date' => date('Y-m-d H:i:s', filemtime($uploadDir . $f)),
-                ];
-            }
-        }
-    } else {
-        $uploadError = "Erreur lors de l'upload";
-    }
-}
-
-if (isset($_GET['delete'])) {
-    $filename = (string) $_GET['delete'];
-    $filepath = $uploadDir . basename($filename);
-    if (file_exists($filepath)) {
-        unlink($filepath);
-        header('Location: /dashboard');
-        exit;
-    }
-}
-
-$title = 'Dashboard';
-ob_start();
 ?>
-
 <article class="page page--dashboard">
     <header class="dashboard__masthead">
-        <h1 class="title">Dashboard</h1>
+        <h1 class="title"><?= htmlspecialchars((string)($title ?? 'Tableau de bord'), ENT_QUOTES, 'UTF-8') ?></h1>
         <p class="dashboard__lead">Bienvenue, <?= htmlspecialchars((string) $username, ENT_QUOTES, 'UTF-8') ?></p>
         <div class="dashboard__masthead-actions">
             <a href="/logout" class="dashboard__logout">Déconnexion</a>
         </div>
     </header>
 
-    <?php if ($uploadMessage !== ''): ?>
+    <?php if (($uploadMessage ?? '') !== ''): ?>
         <div class="dashboard__alert dashboard__alert--success">
-            <?= htmlspecialchars($uploadMessage, ENT_QUOTES, 'UTF-8') ?>
+            <?= htmlspecialchars((string) $uploadMessage, ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
 
-    <?php if ($uploadError !== ''): ?>
+    <?php if (($uploadError ?? '') !== ''): ?>
         <div class="dashboard__alert dashboard__alert--error">
-            <?= htmlspecialchars($uploadError, ENT_QUOTES, 'UTF-8') ?>
+            <?= htmlspecialchars((string) $uploadError, ENT_QUOTES, 'UTF-8') ?>
         </div>
     <?php endif; ?>
 
@@ -107,7 +39,7 @@ ob_start();
 
     <section class="dashboard__card" aria-labelledby="files-heading">
         <h2 id="files-heading" class="dashboard__card-title">Mes fichiers</h2>
-        <?php if ($files === []): ?>
+        <?php if (($files ?? []) === []): ?>
             <p class="dashboard__empty">Aucun fichier trouvé.</p>
         <?php else: ?>
             <div class="dashboard__table-wrap">
@@ -138,7 +70,3 @@ ob_start();
         <?php endif; ?>
     </section>
 </article>
-
-<?php
-$content = ob_get_clean();
-include __DIR__ . '/../layout.php';

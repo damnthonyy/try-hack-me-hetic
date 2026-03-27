@@ -29,7 +29,7 @@ final class DashboardController
             exit;
         }
 
-        $username = (string)(Session::get('user_email') ?? 'Utilisateur');
+        $username = (string)(Session::get('user_username') ?? Session::get('user_email') ?? 'Utilisateur');
         $files = $this->listUploadedFiles();
         $uploadMessage = '';
         $uploadError = '';
@@ -78,7 +78,7 @@ final class DashboardController
             }
         }
 
-        $username = (string)(Session::get('user_email') ?? 'Utilisateur');
+        $username = (string)(Session::get('user_username') ?? Session::get('user_email') ?? 'Utilisateur');
         $files = $this->listUploadedFiles();
 
         HtmlResponse::render('pages/dashboard', [
