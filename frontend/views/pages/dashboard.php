@@ -69,12 +69,6 @@ if (isset($_GET['delete'])) {
     }
 }
 
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header('Location: /');
-    exit;
-}
-
 $title = 'Dashboard';
 ob_start();
 ?>
@@ -84,7 +78,7 @@ ob_start();
         <h1 class="title">Dashboard</h1>
         <p class="dashboard__lead">Bienvenue, <?= htmlspecialchars((string) $username, ENT_QUOTES, 'UTF-8') ?></p>
         <div class="dashboard__masthead-actions">
-            <a href="?logout=1" class="dashboard__logout">Déconnexion</a>
+            <a href="/logout" class="dashboard__logout">Déconnexion</a>
         </div>
     </header>
 

@@ -18,12 +18,6 @@ final class DashboardController
 
     public function show(): void
     {
-        if (isset($_GET['logout'])) {
-            Session::destroy();
-            header('Location: /', true, 302);
-            exit;
-        }
-
         if (!Session::has('user_id')) {
             header('Location: /auth/login', true, 302);
             exit;

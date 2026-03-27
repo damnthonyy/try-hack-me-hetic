@@ -1,5 +1,7 @@
 # Minimal native PHP API (Docker + Apache + MySQL)
 
+**Architecture & technical choices (FR):** see [TECHNICAL.md](TECHNICAL.md).
+
 ## Prerequisites
 
 - Docker + Docker Compose
