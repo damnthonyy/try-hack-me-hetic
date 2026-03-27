@@ -8,13 +8,16 @@ require_once __DIR__ . '/../src/Http/Router.php';
 require_once __DIR__ . '/../src/Http/Cors.php';
 require_once __DIR__ . '/../src/Http/Session.php';
 require_once __DIR__ . '/../src/Infrastructure/Database.php';
+require_once __DIR__ . '/../src/Http/RequestBody.php';
 require_once __DIR__ . '/../src/Controllers/HealthController.php';
 require_once __DIR__ . '/../src/Controllers/LoginController.php';
+require_once __DIR__ . '/../src/Controllers/DashboardController.php';
 
+use App\Controllers\DashboardController;
 use App\Controllers\HealthController;
-use App\Http\HtmlResponse;
 use App\Controllers\LoginController;
 use App\Http\Cors;
+use App\Http\HtmlResponse;
 use App\Http\JsonResponse;
 use App\Http\Router;
 use App\Infrastructure\Database;
@@ -25,7 +28,28 @@ try {
     $router = new Router();
 
     $router->get('/', static function (): void {
-        JsonResponse::ok(['service' => 'api']);
+        HtmlResponse::render('pages/home', ['title' => 'Accueil']);
+    });
+
+    $router->get('/auth/login', static function (): void {
+        HtmlResponse::render('pages/login', ['title' => 'Connexion']);
+    });
+
+    $router->get('/auth/register', static function (): void {
+        HtmlResponse::render('pages/register', ['title' => 'Inscription']);
+    });
+
+    $router->get('/auth/signup', static function (): void {
+        HtmlResponse::render('pages/register', ['title' => 'Inscription']);
+    });
+
+    $dashboardController = new DashboardController();
+    $router->get('/dashboard', static function () use ($dashboardController): void {
+        $dashboardController->show();
+    });
+
+    $router->post('/dashboard', static function () use ($dashboardController): void {
+        $dashboardController->handlePost();
     });
 
     $router->get('/api', static function (): void {
@@ -44,6 +68,10 @@ try {
 
     $router->post('/register', static function () use ($loginController): void {
         $loginController->register();
+    });
+
+    $router->get('/logout', static function () use ($loginController): void {
+        $loginController->logout();
     });
 
     $router->post('/logout', static function () use ($loginController): void {

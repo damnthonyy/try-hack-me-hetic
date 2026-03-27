@@ -1,0 +1,289 @@
+/* Dashboard — aligné sur app.css + login (cartes, accents, focus) */
+
+.page--dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.dashboard__masthead {
+    padding: 1.35rem 1.5rem;
+    color: #fff;
+    background: linear-gradient(180deg, var(--color-accent-light) 0%, var(--color-accent) 100%);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: var(--border-subtle);
+}
+
+.dashboard__masthead .title {
+    margin: 0 0 0.25rem;
+    font-size: 1.5rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
+.dashboard__lead {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgb(255 255 255 / 0.92);
+}
+
+.dashboard__masthead-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dashboard__logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff !important;
+    text-decoration: none !important;
+    background: rgb(255 255 255 / 0.18);
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: var(--radius);
+    transition:
+        background-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.dashboard__logout:hover {
+    background: rgb(255 255 255 / 0.28);
+    color: #fff !important;
+}
+
+.dashboard__logout:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(255 255 255 / 0.45);
+}
+
+.dashboard__logout:active {
+    transform: scale(0.98);
+}
+
+/* Alertes (même esprit que le reste du site, coins arrondis) */
+
+.dashboard__alert {
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    border: 1px solid transparent;
+}
+
+.dashboard__alert--success {
+    background: #e8f5e9;
+    color: #1b5e20;
+    border-color: rgb(46 125 50 / 0.35);
+}
+
+.dashboard__alert--error {
+    background: #ffebee;
+    color: #b71c1c;
+    border-color: rgb(211 47 47 / 0.35);
+}
+
+/* Cartes = même traitement que .auth */
+
+.dashboard__card {
+    padding: 1.35rem 1.5rem;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: var(--border-subtle);
+}
+
+.dashboard__card .dashboard__card-title {
+    margin: 0 0 1rem;
+    padding-bottom: 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    border-bottom: 1px solid #eee;
+    color: var(--color-text);
+}
+
+.dashboard__upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dashboard__upload-form .form-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.dashboard__file-input {
+    width: 100%;
+    padding: 0.75rem;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    background: var(--color-surface-subtle);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.dashboard__file-input:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-surface);
+}
+
+.dashboard__file-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    border-style: solid;
+    box-shadow: var(--focus-ring);
+}
+
+/* Bouton primaire (même modèle que login/register) */
+.page--dashboard .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.page--dashboard .btn:active {
+    transform: scale(0.98);
+}
+
+.page--dashboard .btn-primary {
+    color: #fff;
+    background: linear-gradient(180deg, var(--color-accent-light) 0%, var(--color-accent) 100%);
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.12) inset;
+}
+
+.page--dashboard .btn-primary:hover {
+    background: linear-gradient(180deg, #1c6fe8 0%, #0d5bd6 100%);
+}
+
+.page--dashboard .btn-primary:focus {
+    outline: none;
+    box-shadow:
+        0 0 0 3px rgb(11 87 208 / 0.35),
+        0 1px 0 rgb(0 0 0 / 0.12) inset;
+}
+
+.dashboard__upload-form .btn-primary {
+    width: auto;
+    align-self: flex-start;
+    min-width: 9rem;
+}
+
+/* Tableau */
+
+.dashboard__table-wrap {
+    overflow-x: auto;
+    margin: 0 -0.25rem;
+}
+
+.dashboard__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.dashboard__table th,
+.dashboard__table td {
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.dashboard__table th {
+    font-weight: 600;
+    color: #333;
+    background: var(--color-surface-subtle);
+}
+
+.dashboard__table tbody tr:hover {
+    background: rgb(11 87 208 / 0.04);
+}
+
+.dashboard__table .dashboard__empty {
+    margin: 0;
+    padding: 0.5rem 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+.dashboard__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.dashboard__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.85rem;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.dashboard__btn:active {
+    transform: scale(0.98);
+}
+
+.dashboard__btn--primary {
+    color: #fff !important;
+    background: linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%);
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.12) inset;
+}
+
+.dashboard__btn--primary:hover {
+    filter: brightness(1.06);
+    color: #fff !important;
+}
+
+.dashboard__btn--danger {
+    color: #fff !important;
+    background: linear-gradient(180deg, #e53935 0%, #c62828 100%);
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.12) inset;
+}
+
+.dashboard__btn--danger:hover {
+    filter: brightness(1.06);
+    color: #fff !important;
+}
+
+.dashboard__btn:focus {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}

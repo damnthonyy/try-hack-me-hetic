@@ -1,0 +1,142 @@
+/* Login & register */
+
+.auth {
+    max-width: 22rem;
+    margin: 0 auto;
+    padding: 1.75rem 1.5rem 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow:
+        0 1px 2px rgb(0 0 0 / 0.06),
+        0 8px 24px rgb(0 0 0 / 0.08);
+    border: 1px solid rgb(0 0 0 / 0.06);
+}
+
+.auth__header {
+    margin-bottom: 1.5rem;
+}
+
+.auth__header .title {
+    font-size: 1.5rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+}
+
+.auth__header .lead {
+    margin-top: 0.35rem;
+    font-size: 0.95rem;
+}
+
+.auth__alert {
+    margin-bottom: 1rem;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
+
+.auth__alert--error {
+    background: rgb(254 242 242);
+    border: 1px solid rgb(252 165 165);
+    color: rgb(127 29 29);
+}
+
+.auth__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group:last-of-type {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font: inherit;
+    font-size: 1rem;
+    color: #1a1a1a;
+    background: #fafafa;
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.form-control:hover {
+    border-color: #b0b0b0;
+    background: #fff;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #0b57d0;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgb(11 87 208 / 0.2);
+}
+
+.form-control::placeholder {
+    color: #888;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    color: #fff;
+    background: linear-gradient(180deg, #1565e0 0%, #0b57d0 100%);
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.12) inset;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(180deg, #1c6fe8 0%, #0d5bd6 100%);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow:
+        0 0 0 3px rgb(11 87 208 / 0.35),
+        0 1px 0 rgb(0 0 0 / 0.12) inset;
+}
+
+.auth__footer {
+    margin: 1.25rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid #eee;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+}

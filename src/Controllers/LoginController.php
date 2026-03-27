@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Http\JsonResponse;
 use App\Http\Session;
 use App\Infrastructure\Database;
 
@@ -12,105 +11,116 @@ final class LoginController
 {
     public function login(): void
     {
-        $input = json_decode(file_get_contents('php://input'), true);
-        
-        if (!isset($input['email']) || !isset($input['password'])) {
-            JsonResponse::error('Email and password are required', 400);
-            return;
-        }
+        $email = isset($_POST['email']) ? trim((string)$_POST['email']) : '';
+        $password = isset($_POST['password']) ? (string)$_POST['password'] : '';
 
-        $email = $input['email'];
-        $password = $input['password'];
+        if ($email === '' || $password === '') {
+            $this->redirect('/auth/login?error=required');
+        }
 
         try {
             $pdo = Database::createPdoFromEnv();
-            
-            $stmt = $pdo->prepare('SELECT id, email, password FROM users WHERE email = :email LIMIT 1');
+
+            $stmt = $pdo->prepare(
+                'SELECT id, email, username, password FROM users WHERE email = :email LIMIT 1'
+            );
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$user || !password_verify($password, $user['password'])) {
-                JsonResponse::error('Invalid credentials', 401);
-                return;
+                $this->redirect('/auth/login?error=invalid');
             }
 
             Session::set('user_id', $user['id']);
             Session::set('user_email', $user['email']);
+            Session::set('user_username', (string)$user['username']);
 
-            JsonResponse::ok([
-                'message' => 'Login successful',
-                'user' => [
-                    'id' => $user['id'],
-                    'email' => $user['email']
-                ]
-            ]);
-        } catch (\Throwable $throwable) {
-            JsonResponse::error('Database error: ' . $throwable->getMessage(), 500);
+            $this->redirect('/dashboard');
+        } catch (\Throwable) {
+            $this->redirect('/auth/login?error=server');
         }
     }
 
     public function logout(): void
     {
         Session::destroy();
-        
-        JsonResponse::ok(['message' => 'Logout successful']);
+
+        $this->redirect('/');
     }
 
     public function register(): void
     {
-        $input = json_decode(file_get_contents('php://input'), true);
-        
-        if (!isset($input['email']) || !isset($input['password'])) {
-            JsonResponse::error('Email and password are required', 400);
-            return;
+        $username = isset($_POST['username']) ? trim((string)$_POST['username']) : '';
+        $email = isset($_POST['email']) ? trim((string)$_POST['email']) : '';
+        $password = isset($_POST['password']) ? (string)$_POST['password'] : '';
+        $passwordConfirmation = isset($_POST['password_confirmation'])
+            ? (string)$_POST['password_confirmation']
+            : '';
+
+        if ($username === '' || $email === '' || $password === '' || $passwordConfirmation === '') {
+            $this->redirect('/auth/register?error=required');
         }
 
-        $email = $input['email'];
-        $password = $input['password'];
+        if ($password !== $passwordConfirmation) {
+            $this->redirect('/auth/register?error=mismatch');
+        }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            JsonResponse::error('Invalid email format', 400);
-            return;
+            $this->redirect('/auth/register?error=email');
         }
 
         if (strlen($password) < 6) {
-            JsonResponse::error('Password must be at least 6 characters', 400);
-            return;
+            $this->redirect('/auth/register?error=password');
+        }
+
+        $usernameLen = strlen($username);
+        if ($usernameLen < 3 || $usernameLen > 64 || !preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+            $this->redirect('/auth/register?error=invalid_username');
         }
 
         try {
             $pdo = Database::createPdoFromEnv();
-            
+
             $stmt = $pdo->prepare('SELECT id FROM users WHERE email = :email LIMIT 1');
             $stmt->execute(['email' => $email]);
-            
+
             if ($stmt->fetch()) {
-                JsonResponse::error('Email already exists', 409);
-                return;
+                $this->redirect('/auth/register?error=taken');
+            }
+
+            $stmt = $pdo->prepare('SELECT id FROM users WHERE username = :username LIMIT 1');
+            $stmt->execute(['username' => $username]);
+
+            if ($stmt->fetch()) {
+                $this->redirect('/auth/register?error=username_taken');
             }
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = $pdo->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
+            $stmt = $pdo->prepare(
+                'INSERT INTO users (email, username, password) VALUES (:email, :username, :password)'
+            );
             $stmt->execute([
                 'email' => $email,
-                'password' => $hashedPassword
+                'username' => $username,
+                'password' => $hashedPassword,
             ]);
 
             $userId = (int)$pdo->lastInsertId();
 
             Session::set('user_id', $userId);
             Session::set('user_email', $email);
+            Session::set('user_username', $username);
 
-            JsonResponse::ok([
-                'message' => 'Registration successful',
-                'user' => [
-                    'id' => $userId,
-                    'email' => $email
-                ]
-            ], 201);
-        } catch (\Throwable $throwable) {
-            JsonResponse::error('Database error: ' . $throwable->getMessage(), 500);
+            $this->redirect('/dashboard');
+        } catch (\Throwable) {
+            $this->redirect('/auth/register?error=server');
         }
+    }
+
+    private function redirect(string $url): never
+    {
+        header('Location: ' . $url, true, 302);
+        exit;
     }
 }

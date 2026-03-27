@@ -1,0 +1,44 @@
+/* Home */
+
+.page--home {
+    padding: 0.5rem 0;
+}
+
+.page--home .title {
+    font-weight: 650;
+    letter-spacing: -0.02em;
+}
+
+.page--home .lead {
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.page--home .lead code {
+    font-weight: 500;
+}
+
+.page--home .home-desc {
+    margin-top: 1.25rem;
+}
+
+.page--home .home-desc p {
+    margin: 0;
+    color: var(--color-text-soft);
+    line-height: 1.65;
+    font-size: 0.98rem;
+}
+
+.page--home .home-hint {
+    margin: 2rem 0 0;
+    padding-top: 1rem;
+    border-top: var(--border-subtle);
+}
+
+.page--home .home-hint p {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: rgb(0 0 0 / 0.42);
+    letter-spacing: 0.01em;
+}
